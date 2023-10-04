@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  database:
+    image: mysql
+    ports:
+      - "3316:3306"
+    restart: always
+    networks:
+      - api-services
+
+  backend:
+    image: node:alpine
+    build:
+      context: .
+      target: dev # Build stage in DockerFile
+    container_name: services-checkin-backend
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - database
+    ports:
+    - "8080:9000" # map 9000 in container => 8080 in local
+    networks:
+      - api-services
