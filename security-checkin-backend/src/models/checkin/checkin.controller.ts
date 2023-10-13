@@ -23,7 +23,7 @@ export class CheckinController {
     private readonly checkinService: CheckinService,
     private readonly locationService: LocationService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   @Post()
   async create(@Body() createCheckinDto: CreateCheckinDto) {

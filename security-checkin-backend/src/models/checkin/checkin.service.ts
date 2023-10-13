@@ -8,11 +8,11 @@ export class CheckinService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findOne(id: number) {
-    return this.prismaService.checkin.findFirst({ where: { id } });
+    return await this.prismaService.checkin.findFirst({ where: { id } });
   }
 
   async findAll() {
-    return this.prismaService.checkin.findMany();
+    return await this.prismaService.checkin.findMany();
   }
 
   async create(createCheckinDto: CreateCheckinDto, status: Status) {
@@ -39,7 +39,7 @@ export class CheckinService {
     id: number,
     changeStatusCheckinDto: ChangeStatusCheckinDto,
   ) {
-    return this.prismaService.checkin.update({
+    return await this.prismaService.checkin.update({
       where: {
         id,
       },
@@ -48,6 +48,6 @@ export class CheckinService {
   }
 
   async delete(id: number) {
-    return this.prismaService.checkin.delete({ where: { id } });
+    return await this.prismaService.checkin.delete({ where: { id } });
   }
 }
