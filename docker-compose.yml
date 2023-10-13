@@ -23,3 +23,5 @@ services:
     - "8080:9000" # map 9000 in container => 8080 in local
     networks:
       - api-services
+networks:
+  api-services:
