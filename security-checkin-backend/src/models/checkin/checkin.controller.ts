@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Param,
+  Delete,
   HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
@@ -22,7 +23,7 @@ export class CheckinController {
     private readonly checkinService: CheckinService,
     private readonly locationService: LocationService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() createCheckinDto: CreateCheckinDto) {
@@ -84,5 +85,10 @@ export class CheckinController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.checkinService.updateStatus(id, changeStatusCheckinDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.checkinService.delete(id);
   }
 }

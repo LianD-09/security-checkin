@@ -27,6 +27,8 @@ export class CreateCheckinDto {
 export class ChangeStatusCheckinDto {
   @IsNotEmpty()
   @IsEnum(Status)
-  @ApiProperty()
+  @ApiProperty({
+    enum: Status,
+  })
   status: Status;
 }

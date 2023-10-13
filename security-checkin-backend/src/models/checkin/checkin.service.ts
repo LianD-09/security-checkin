@@ -46,4 +46,8 @@ export class CheckinService {
       data: changeStatusCheckinDto,
     });
   }
+
+  async delete(id: number) {
+    return this.prismaService.checkin.delete({ where: { id } });
+  }
 }
