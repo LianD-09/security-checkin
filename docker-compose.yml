@@ -11,17 +11,18 @@ services:
   backend:
     image: node:alpine
     build:
-      context: .
+      context: ./security-checkin-backend
       target: dev # Build stage in DockerFile
     container_name: services-checkin-backend
     restart: always
     env_file:
-      - .env
+      - ./security-checkin-backend/.env
     depends_on:
       - database
     ports:
     - "8080:9000" # map 9000 in container => 8080 in local
     networks:
       - api-services
+
 networks:
   api-services:
