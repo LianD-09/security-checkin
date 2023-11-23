@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors();
   await app.listen(process.env.PORT, () => {
     logger.log(
-      `🚀 🙄😳🙄 GraphQL Service start at http://localhost:${process.env.PORT}/graphql`,
+      `🚀 🙄😳🙄 Restfull API Service start at http://localhost:${process.env.PORT}/`,
     );
   });
 }

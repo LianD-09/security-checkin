@@ -15,6 +15,7 @@ import { CheckinService } from './checkin.service';
 import { Status } from '@prisma/client';
 import { LocationService } from '../location/location.service';
 import { UserService } from '../user/user.service';
+import { distance } from 'src/common/utils/common.utils';
 
 @Controller('checkin')
 @ApiTags('checkin')
@@ -35,12 +36,12 @@ export class CheckinController {
     if (!location || !userCreated) {
       status = Status.REJECT;
     } else if (
-      location.latitude !== latitude ||
-      location.longtitude !== longtitude
+      distance(location.latitude, location.longtitude, latitude, longtitude) > parseFloat(process.env.ACCEPT_DISTANCE)
     ) {
       status = Status.REJECT;
     }
-    return this.checkinService.create(createCheckinDto, status);
+
+    return await this.checkinService.create(createCheckinDto, status);
   }
 
   @Get()
@@ -84,11 +85,11 @@ export class CheckinController {
     @Body() changeStatusCheckinDto: ChangeStatusCheckinDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.checkinService.updateStatus(id, changeStatusCheckinDto);
+    return await this.checkinService.updateStatus(id, changeStatusCheckinDto);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return this.checkinService.delete(id);
+    return await this.checkinService.delete(id);
   }
 }

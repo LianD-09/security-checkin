@@ -10,7 +10,7 @@ async function main() {
     data: {
       id: 1,
       userName: 'admin',
-      password: '123456',
+      password: '$2a$15$vjzmB82wjOlkscHsCVgl1uC4Mf3httLHAVwX9Clm4YIEMOn6fZnUi', // 123456
       role: 'ADMIN',
       name: 'Super Admin',
       phone: '99999999',
@@ -19,8 +19,9 @@ async function main() {
   });
   const securitySeed = await prisma.user.create({
     data: {
+      id: 2,
       userName: 'security_staff',
-      password: '123456',
+      password: '$2a$15$vjzmB82wjOlkscHsCVgl1uC4Mf3httLHAVwX9Clm4YIEMOn6fZnUi', // 123456
       role: 'SECURITY',
       name: 'Security Staff 1',
       phone: '0123456789',
@@ -30,14 +31,17 @@ async function main() {
 
   const locationSeed = await prisma.location.create({
     data: {
+      id: 1,
       name: 'HUST',
       latitude: 21.007302,
       longtitude: 105.842657,
     },
   });
+
   const checkinSeed = await prisma.checkin.create({
     data: {
-      createBy: 0,
+      id: 1,
+      createBy: 1,
       latitude: 0,
       longtitude: 0,
       status: 'REJECT',

@@ -12,11 +12,14 @@ $ yarn
 
 $ yarn prisma generate
 
+// create DB
+$ yarn prisma migrate dev
+
 // seed database for first run
 $ yarn prisma db seed
 
 // if you don't want to reset your DB run this command instead
-$ yarn prisma db seed --skip-seed
+$ yarn prisma migrate dev --skip-seed
 
 $ yarn start:dev
 ```

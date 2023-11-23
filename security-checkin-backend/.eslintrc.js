@@ -23,6 +23,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     "@typescript-eslint/no-unused-vars": "warn",
     'linebreak-style': ['error', 'windows'],
-    "prettier/prettier": "warn",
+    "prettier/prettier": "off",
   },
 };

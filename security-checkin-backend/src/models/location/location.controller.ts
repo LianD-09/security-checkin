@@ -20,7 +20,7 @@ export class LocationController {
 
   @Post()
   async create(@Body() createLocationDto: CreateLocationDto) {
-    return this.locationService.create(createLocationDto);
+    return await this.locationService.create(createLocationDto);
   }
 
   @Get()
@@ -64,11 +64,11 @@ export class LocationController {
     @Body() updateLocationDto: UpdateLocationDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.locationService.update(id, updateLocationDto);
+    return await this.locationService.update(id, updateLocationDto);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return this.locationService.delete(id);
+    return await this.locationService.delete(id);
   }
 }

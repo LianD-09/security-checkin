@@ -8,6 +8,7 @@ CREATE TABLE `User` (
     `phone` VARCHAR(191) NOT NULL,
     `dob` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `User_userName_key`(`userName`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -28,6 +29,9 @@ CREATE TABLE `Checkin` (
     `createAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createBy` INTEGER NOT NULL,
     `status` ENUM('ACCEPT', 'REJECT') NOT NULL,
+    `latitude` DOUBLE NOT NULL,
+    `longtitude` DOUBLE NOT NULL,
+    `updateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -37,8 +41,9 @@ CREATE TABLE `User_Location` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `locationId` INTEGER NOT NULL,
+    `assignedBy` INTEGER NOT NULL,
     `createAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updateAt` DATETIME(3) NOT NULL,
+    `updateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

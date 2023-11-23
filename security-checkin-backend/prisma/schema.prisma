@@ -22,7 +22,7 @@ enum Status {
 
 model User {
   id       Int       @id @default(autoincrement())
-  userName String
+  userName String    @unique
   password String
   role     Roles     @default(SECURITY)
   name     String
@@ -61,6 +61,7 @@ model User_Location {
   id         Int      @id @default(autoincrement())
   userId     Int
   locationId Int
+  assignedBy Int
   createAt   DateTime @default(now())
   updateAt   DateTime @default(now()) @updatedAt
 
