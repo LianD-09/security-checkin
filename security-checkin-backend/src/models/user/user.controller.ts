@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { HttpException } from '@nestjs/common/exceptions';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { UserService } from './user.service';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Controller('user')
 @ApiTags('user')

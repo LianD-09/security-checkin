@@ -8,7 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { HttpException } from '@nestjs/common/exceptions';
 import { AuthService } from './auth.service';
 import { UserAuthDto } from './dto/user-auth.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Controller('auth')
 @ApiTags('auth')

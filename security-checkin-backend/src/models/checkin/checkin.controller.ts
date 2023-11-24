@@ -15,7 +15,7 @@ import { CheckinService } from './checkin.service';
 import { Status } from '@prisma/client';
 import { LocationService } from '../location/location.service';
 import { UserService } from '../user/user.service';
-import { distance } from 'src/common/utils/common.utils';
+import { distance } from '../../common/utils/common.utils';
 
 @Controller('checkin')
 @ApiTags('checkin')
@@ -24,7 +24,7 @@ export class CheckinController {
     private readonly checkinService: CheckinService,
     private readonly locationService: LocationService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() createCheckinDto: CreateCheckinDto) {
