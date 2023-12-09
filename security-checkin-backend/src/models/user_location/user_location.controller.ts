@@ -7,10 +7,11 @@ import {
   Delete,
   HttpStatus,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { HttpException } from '@nestjs/common/exceptions';
-import { CreateUserLocationDto } from './dto/user_location.dto';
+import { UserLocationDto } from './dto/user_location.dto';
 import { UserLocationService } from './user_location.service';
 import { LocationService } from '../location/location.service';
 import { UserService } from '../user/user.service';
@@ -25,30 +26,42 @@ export class UserLocationController {
   ) { }
 
   @Post()
-  async create(@Body() dto: CreateUserLocationDto) {
+  async create(@Body() dto: UserLocationDto) {
     try {
       const { userId, locationId } = dto;
       const location = await this.locationService.findOne(locationId);
       const userAssigned = await this.userService.findOne(userId);
+      const allUserTask = await this.userLocationService.findBy(userId);
 
-      if (!location && !userAssigned) {
+      if (location && userAssigned) {
+        for (let i = 0; i < allUserTask.length; i++) {
+          if (allUserTask[i].locationId === locationId) {
+            throw new HttpException({
+              status: HttpStatus.BAD_REQUEST,
+              error: 'Security has been already assigned to this location',
+            },
+              HttpStatus.BAD_REQUEST
+            )
+          }
+        }
         return await this.userLocationService.create(dto);
       }
-
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: 'Security has been already assigned to this location',
-      },
-        HttpStatus.BAD_REQUEST
-      )
+      else {
+        throw new HttpException({
+          status: HttpStatus.BAD_REQUEST,
+          error: 'User or Location not found',
+        },
+          HttpStatus.BAD_REQUEST
+        )
+      }
     }
     catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -63,10 +76,46 @@ export class UserLocationController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
+  }
+  @ApiQuery({
+    name: "userId",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "locationId",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "assignedBy",
+    required: false,
+    type: Number
+  })
+  @Get('filter')
+  async findBy(
+    @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
+    @Query('locationId', new ParseIntPipe({ optional: true })) locationId?: number,
+    @Query('assignedBy', new ParseIntPipe({ optional: true })) assignedBy?: number,
+  ) {
+    try {
+      return await this.userLocationService.findBy(userId, locationId, assignedBy);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -81,10 +130,10 @@ export class UserLocationController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -94,6 +143,19 @@ export class UserLocationController {
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.userLocationService.delete(id);
+    try {
+      return await this.userLocationService.delete(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 }

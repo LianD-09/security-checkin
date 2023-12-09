@@ -5,7 +5,7 @@ import { Status } from '@prisma/client';
 
 @Injectable()
 export class CheckinService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async findOne(id: number) {
     return await this.prismaService.checkin.findFirst({ where: { id } });
@@ -13,6 +13,17 @@ export class CheckinService {
 
   async findAll() {
     return await this.prismaService.checkin.findMany();
+  }
+
+  async findBy(locationId?: number, createBy?: number) {
+    return await this.prismaService.checkin.findMany(
+      {
+        where: {
+          locationId: locationId,
+          createBy: createBy
+        }
+      }
+    );
   }
 
   async create(createCheckinDto: CreateCheckinDto, status: Status) {

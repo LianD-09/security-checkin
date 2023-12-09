@@ -24,7 +24,7 @@ $ yarn prisma migrate dev --skip-seed
 $ yarn start:dev
 ```
 
-> Note: Don't worry when run ```yarn prisma db seed``` and your log contains error lines. Just go to next command line
+> Note: Don't worry when running ```yarn prisma db seed``` and your log contains error lines. Just go to next command line
 
 - Running web app:
 ```
@@ -32,7 +32,7 @@ $ cd security-checkin-frontend
 
 $ yarn 
 
-$ yarn start
+$ yarn start:dev
 ```
 
 - Running mobile app:

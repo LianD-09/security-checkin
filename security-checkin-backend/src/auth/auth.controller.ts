@@ -43,10 +43,10 @@ export class AuthController {
         } catch (error) {
             throw new HttpException(
                 {
-                    status: HttpStatus.FORBIDDEN,
-                    error: 'This is a custom message',
+                    status: HttpStatus.BAD_REQUEST,
+                    error: error,
                 },
-                HttpStatus.FORBIDDEN,
+                HttpStatus.BAD_REQUEST,
                 {
                     cause: error,
                 },

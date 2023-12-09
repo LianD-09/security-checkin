@@ -16,11 +16,24 @@ import { LocationService } from './location.service';
 @Controller('location')
 @ApiTags('location')
 export class LocationController {
-  constructor(private readonly locationService: LocationService) {}
+  constructor(private readonly locationService: LocationService) { }
 
   @Post()
   async create(@Body() createLocationDto: CreateLocationDto) {
-    return await this.locationService.create(createLocationDto);
+    try {
+      return await this.locationService.create(createLocationDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Get()
@@ -30,10 +43,10 @@ export class LocationController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -48,10 +61,10 @@ export class LocationController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -64,11 +77,37 @@ export class LocationController {
     @Body() updateLocationDto: UpdateLocationDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.locationService.update(id, updateLocationDto);
+    try {
+      return await this.locationService.update(id, updateLocationDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.locationService.delete(id);
+    try {
+      return await this.locationService.delete(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 }

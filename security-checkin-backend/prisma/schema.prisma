@@ -44,14 +44,15 @@ model Location {
 }
 
 model Checkin {
-  id       Int      @id @default(autoincrement())
-  locationId Int
-  createAt DateTime @default(now())
-  createBy Int
-  status Status
-  latitude   Float
-  longtitude Float
-  updateAt DateTime @default(now()) @updatedAt
+  id          Int      @id @default(autoincrement())
+  locationId  Int
+  createAt    DateTime @default(now())
+  createBy    Int
+  status      Status
+  latitude    Float
+  longtitude  Float
+  updateAt    DateTime @default(now()) @updatedAt
+  note        String?
 
   user User @relation(fields: [createBy], references: [id])
   location Location  @relation(fields: [locationId], references: [id])

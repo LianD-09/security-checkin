@@ -4,10 +4,12 @@
 if [ "${1}" = "production" ]; then
     echo "Starting in production mode"
 
-    sleep 20s
-    yarn prisma migrate deploy
+    sleep 10s
+    yarn prisma migrate deploy --skip-seed
 
-    node ./dist/src/main.js
+    yarn build
+
+    yarn start:prod
 fi
 
 # if run with

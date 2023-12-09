@@ -22,6 +22,9 @@ export class CreateCheckinDto {
   @IsNumber()
   @ApiProperty()
   longtitude: number;
+
+  @ApiProperty()
+  note?: string;
 }
 
 export class ChangeStatusCheckinDto {

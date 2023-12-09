@@ -39,10 +39,10 @@ export class UserController {
     catch (e) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
+          status: HttpStatus.BAD_REQUEST,
           error: e,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: e
         }
@@ -57,10 +57,10 @@ export class UserController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -75,10 +75,10 @@ export class UserController {
     } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
         },
-        HttpStatus.FORBIDDEN,
+        HttpStatus.BAD_REQUEST,
         {
           cause: error,
         },
@@ -91,11 +91,37 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.userService.update(id, updateUserDto);
+    try {
+      return await this.userService.update(id, updateUserDto);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.userService.delete(id);
+    try {
+      return await this.userService.delete(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 }
