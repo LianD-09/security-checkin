@@ -25,21 +25,21 @@ export class AuthController {
             const userExist = await this.prismaService.user.findFirst({ where: { userName } })
 
             if (userExist) {
+                const userRes = userExist;
                 const isAuthernticated = await this.authService.compareAuth(password, userExist.password);
                 if (isAuthernticated) {
+                    delete userRes.password;
                     return {
                         status: HttpStatus.OK,
-                        message: "Login successfully!"
+                        message: "Login successfully!",
+                        data: userRes,
                     }
                 }
             }
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    error: "Wrong username or password!"
-                },
-                HttpStatus.BAD_REQUEST
-            )
+            return {
+                status: HttpStatus.OK,
+                error: "Wrong username or password!"
+            }
         } catch (error) {
             throw new HttpException(
                 {

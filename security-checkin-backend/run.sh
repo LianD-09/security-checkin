@@ -5,7 +5,11 @@ if [ "${1}" = "production" ]; then
     echo "Starting in production mode"
 
     sleep 10s
-    yarn prisma migrate deploy
+    yarn prisma generate
+
+    # yarn prisma migrate dev --name redeploy_database --skip-seed
+
+    # yarn prisma migrate deploy
 
     yarn build
 
