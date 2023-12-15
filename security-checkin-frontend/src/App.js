@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './App.css';
 import LoadingModal from './components/modal/LoadingModal';
 import Router from './router';
 import Modal from 'react-modal';
