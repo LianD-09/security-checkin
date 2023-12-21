@@ -15,12 +15,13 @@ export class CheckinService {
     return await this.prismaService.checkin.findMany();
   }
 
-  async findBy(locationId?: number, createBy?: number) {
+  async findBy(locationId?: number, createBy?: number, status?: Status) {
     return await this.prismaService.checkin.findMany(
       {
         where: {
           locationId: locationId,
-          createBy: createBy
+          createBy: createBy,
+          status: status
         }
       }
     );

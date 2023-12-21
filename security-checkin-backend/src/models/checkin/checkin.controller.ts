@@ -86,13 +86,19 @@ export class CheckinController {
     required: false,
     type: Number
   })
+  @ApiQuery({
+    name: "status",
+    required: false,
+    type: String
+  })
   @Get('filter')
   async findBy(
     @Query('locationId', new ParseIntPipe({ optional: true })) locationId?: number,
-    @Query('createBy', new ParseIntPipe({ optional: true })) createBy?: number
+    @Query('createBy', new ParseIntPipe({ optional: true })) createBy?: number,
+    @Query('status') status?: Status
   ) {
     try {
-      return await this.checkinService.findBy(locationId, createBy);
+      return await this.checkinService.findBy(locationId, createBy, status);
     } catch (error) {
       throw new HttpException(
         {
