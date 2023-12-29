@@ -10,6 +10,7 @@ import { UserLocationModule } from './models/user_location/user_location.module'
 import { AuthModule } from './auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerInterceptor } from './common/interceptors/logging.interceptor';
+import { ConfigAppModule } from './models/config/configApp.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LoggerInterceptor } from './common/interceptors/logging.interceptor';
     LocationModule,
     CheckinModule,
     UserLocationModule,
+    ConfigAppModule,
   ],
   controllers: [AppController],
   providers: [

@@ -17,6 +17,7 @@ import { Status } from '@prisma/client';
 import { LocationService } from '../location/location.service';
 import { UserService } from '../user/user.service';
 import { distance } from '../../common/utils/common.utils';
+import * as configData from "../../../config/config.json";
 
 @Controller('checkin')
 @ApiTags('checkin')
@@ -38,7 +39,7 @@ export class CheckinController {
       if (!location || !userCreated) {
         status = Status.REJECT;
       } else if (
-        distance(location.latitude, location.longtitude, latitude, longtitude) > parseFloat(process.env.ACCEPT_DISTANCE)
+        distance(location.latitude, location.longtitude, latitude, longtitude) > configData.ACCEPT_DISTANCE
       ) {
         status = Status.REJECT;
       }
