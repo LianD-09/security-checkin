@@ -17,7 +17,7 @@ import { Status } from '@prisma/client';
 import { LocationService } from '../location/location.service';
 import { UserService } from '../user/user.service';
 import { distance } from '../../common/utils/common.utils';
-import * as configData from "../../../config/config.json";
+import * as fs from 'fs';
 
 @Controller('checkin')
 @ApiTags('checkin')
@@ -35,6 +35,7 @@ export class CheckinController {
       let status: Status = Status.ACCEPT;
       const location = await this.locationService.findOne(locationId);
       const userCreated = await this.userService.findOne(createBy);
+      const configData = JSON.parse(fs.readFileSync("./config/config.json").toString('utf-8'));
 
       if (!location || !userCreated) {
         status = Status.REJECT;

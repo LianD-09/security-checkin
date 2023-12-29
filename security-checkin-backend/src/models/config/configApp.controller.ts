@@ -8,7 +8,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { HttpException } from '@nestjs/common/exceptions';
 import { UpdateConfigDto } from './dto/configApp.dto';
-import * as configData from "../../../config/config.json";
 import * as fs from 'fs';
 
 @Controller('config')
@@ -44,10 +43,11 @@ export class ConfigAppController {
     @Get()
     async getConfig() {
         try {
+            const configData = fs.readFileSync("./config/config.json");
             return {
                 status: HttpStatus.OK,
                 data: {
-                    distance: configData.ACCEPT_DISTANCE
+                    distance: JSON.parse(configData.toString('utf8')).ACCEPT_DISTANCE
                 }
             }
         } catch (error) {
