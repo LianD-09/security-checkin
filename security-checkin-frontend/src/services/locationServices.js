@@ -1,4 +1,3 @@
-import { ConnectedTvSharp } from '@mui/icons-material';
 import axios from 'axios';
 const apiEndpoint = process.env.REACT_APP_API_URL + '/location'
 
@@ -12,8 +11,20 @@ export const getAllLocation = async () => {
 
 export const createLocation = async (body) => {
     return await axios.post(`${apiEndpoint}`, {
-        locationname: body.name,
+        name: body.name,
         latitude: body.latitude,
         longtitude: body.longtitude
     });
+}
+
+export const updateLocationById = async (id, body) => {
+    return await axios.post(`${apiEndpoint}/${id}`,  {
+        name: body.name,
+        latitude: body.latitude,
+        longtitude: body.longtitude
+    });
+}
+
+export const deleteLocationById = async (id) => {
+    return await axios.delete(`${apiEndpoint}/${id}`);
 }
