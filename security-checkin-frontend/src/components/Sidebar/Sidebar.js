@@ -11,7 +11,7 @@ function Sidebar({ color, image, routes }) {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
   return (
-    <div className="sidebar" data-image={image} data-color={color}>
+    <div className="sidebar" data-image={image} data-color={color} style={{ height: '100vh'}}>
       <div
         className="sidebar-background"
         style={{
