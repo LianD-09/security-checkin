@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { Component,useEffect } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
@@ -26,6 +26,9 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
+import { getAllLocation } from "services/locationServices";
+import { requestAllLocation } from "store/location/function";
+import { store } from "store";
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
@@ -61,6 +64,11 @@ function Admin() {
       element.parentNode.removeChild(element);
     }
   }, [location]);
+  useEffect(() => {
+    requestAllLocation().then()
+    console.log("store",store.getState())
+  }, [])
+
   return (
     <>
       <div className="wrapper">

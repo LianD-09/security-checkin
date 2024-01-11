@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 // react-bootstrap components
 import {
@@ -12,8 +12,86 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { getAllCheckins } from "services/checkinServices";
+import { useAsyncFn } from "react-use";
+import { store } from "store";
+import moment from "moment"
+import VirtualTable from "components/VirtualTable";
 
 function CheckinHistory() {
+  const [records, setRecords] = useState([]);
+  const [{ loading: refreshing }, getList] = useAsyncFn(async () => {
+    const res = await getAllCheckins();
+    if(res.data) {
+      setRecords(res.data)
+    }
+  }, []);
+  useEffect(() => {
+    getList().then();
+  }, []);
+  const { dataSource, lids, uids } = useMemo(() => {
+    const lids = {};
+    const uids = {};
+    let results = [];
+    const locationById = store.getState().location.byKey
+    console.log("locations", locationById)
+
+    for (let i = 0; i < records.length; i++){
+      const record = records[i];
+      const location = locationById[record?.locationId || ""]
+      lids[location.name] = location.name;
+      uids[record.createBy] = record.createBy;
+
+        results.push({
+          key: record.id,
+          uid: record.createBy,
+          location: location.name,
+          time: moment(record.createAt).format("HH:mm:ss"),
+          date: moment(record.createAt).format("DD/MM/YYYY"),
+          timestamp: moment(record.createAt).unix(),
+        })
+      }
+
+    return {
+      lids,
+      uids,
+      dataSource: results,
+    };
+  }, [records?.length]);
+  const columns = useMemo(() => {
+    return [
+      {
+        title: "Mã nhân viên",
+        key: "uid",
+        dataIndex: "uid",
+        filters: Object.values(uids ||{}).map((uid) => ({ text: uid, value: uid })),
+        onFilter: (value, record) => record.uid == value,
+      },
+      {
+        title: "Địa điểm",
+        key: "location",
+        dataIndex: "location",
+        filters: Object.values(lids || {}).map((ip) => ({ text: ip, value: ip })),
+        onFilter: (value, record) =>
+          record.location === value,
+      },
+      {
+        title: "Thời gian",
+        key: "time",
+        dataIndex: "time",
+        defaultSortOrder: "descend",
+      },
+      {
+        title: "Ngày",
+        key: "date",
+        dataIndex: "date",
+        defaultSortOrder: "descend",
+        sorter: (a, b) =>
+          a.timestamp - b.timestamp,
+      },
+    ];
+  }, [ lids, uids]);
+
   return (
     <>
       <Container fluid>
@@ -21,134 +99,10 @@ function CheckinHistory() {
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">Striped Table with Hover</Card.Title>
-                <p className="card-category">
-                  Here is a subtitle for this table
-                </p>
+                <Card.Title as="h4">Danh sách chấm công</Card.Title>
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Salary</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">City</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md="12">
-            <Card className="card-plain table-plain-bg">
-              <Card.Header>
-                <Card.Title as="h4">Table on Plain Background</Card.Title>
-                <p className="card-category">
-                  Here is a subtitle for this table
-                </p>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Salary</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">City</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <VirtualTable columns={columns} dataSource={dataSource}/>
               </Card.Body>
             </Card>
           </Col>

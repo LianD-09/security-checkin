@@ -28,15 +28,20 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
 import Login from "layouts/Login";
+import {store} from "./store"
+import {Provider} from "react-redux";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter>
-    <Switch>
-      {/* <Route path="/" component={Login} /> */}
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-    </Switch>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Switch>
+        {/* <Route path="/" component={Login} /> */}
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Redirect from="/" to="/admin/dashboard" />
+      </Switch>
+    </BrowserRouter>
+  </Provider>
 );
