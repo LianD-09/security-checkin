@@ -33,22 +33,20 @@ function CheckinHistory() {
     const lids = {};
     const uids = {};
     let results = [];
-    const locationById = store.getState().location.byKey
-    console.log("locations", locationById)
 
     for (let i = 0; i < records.length; i++){
       const record = records[i];
-      const location = locationById[record?.locationId || ""]
-      lids[location.name] = location.name;
-      uids[record.createBy] = record.createBy;
+      lids[record?.location?.name] = record?.location?.name;
+      uids[record?.user?.userName] = record?.user?.userName;
 
         results.push({
           key: record.id,
-          uid: record.createBy,
-          location: location.name,
+          uid: record?.user?.userName,
+          location: record?.location?.name,
           time: moment(record.createAt).format("HH:mm:ss"),
           date: moment(record.createAt).format("DD/MM/YYYY"),
           timestamp: moment(record.createAt).unix(),
+          note: record?.note || "",
         })
       }
 
@@ -61,7 +59,7 @@ function CheckinHistory() {
   const columns = useMemo(() => {
     return [
       {
-        title: "Mã nhân viên",
+        title: "Nhân viên",
         key: "uid",
         dataIndex: "uid",
         filters: Object.values(uids ||{}).map((uid) => ({ text: uid, value: uid })),
@@ -88,6 +86,13 @@ function CheckinHistory() {
         defaultSortOrder: "descend",
         sorter: (a, b) =>
           a.timestamp - b.timestamp,
+      },
+      {
+        title: "Ghi chú",
+        key: "note",
+        dataIndex: "note",
+        defaultSortOrder: "descend",
+
       },
     ];
   }, [ lids, uids]);

@@ -1,6 +1,6 @@
 
 import React, { Component,useEffect } from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
+import {useLocation, Route, Switch, useParams} from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
@@ -11,10 +11,12 @@ import sidebarImage from "assets/img/sidebar-3.jpg";
 import { getAllLocation } from "services/locationServices";
 import { requestAllLocation } from "store/location/function";
 import { store } from "store";
+import {requestAllCheckins} from "../store/checkinLogs/function";
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
+  const {id} = useParams()
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
   const mainPanel = React.useRef(null);
@@ -48,7 +50,7 @@ function Admin() {
   }, [location]);
   useEffect(() => {
     requestAllLocation().then()
-    console.log("store",store.getState())
+    requestAllCheckins().then()
   }, [])
 
   return (

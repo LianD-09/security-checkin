@@ -14,6 +14,9 @@ import {
 import { deleteLocationById, getAllLocation, updateLocationById } from "../services/locationServices";
 import { createLocation } from "../services/locationServices";
 import QRCode from "qrcode.react";
+import moment from "moment";
+import {Calendar} from "antd";
+import {useCheckinByDateAndLocation} from "../store/checkinLogs/function";
 
 const AddModal = ({ isOpen, onSubmit, onClose }) => {
   const [name, setName] = useState('');
@@ -110,7 +113,7 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
   }
 
   return (
-    <Modal show={isOpen} onHide={onClose}>
+    <Modal show={isOpen} onHide={onClose} className={"modal-calendar"}>
       <Modal.Header closeButton>
         <Modal.Title>Edit location</Modal.Title>
       </Modal.Header>
@@ -163,12 +166,53 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
     </Modal>
   )
 }
+const CalendarModal = ({ isOpen, onClose, id }) => {
+  const getListData = (value) => {
+    let listData = useCheckinByDateAndLocation(value.format("DD-MM-YYYY"), id);
+    return listData || [];
+  };
+
+  const dateCellRender = (value) => {
+    const listData = getListData(value);
+    return (
+        <div className="events">
+          {listData.map((item) => (
+              <p key={item.id}>
+                {moment(item?.createAt).format("HH:mm")}
+              </p>
+          ))}
+        </div>
+    );
+  };
+  const cellRender= (current, info) => {
+    if (info.type === 'date') return dateCellRender(current);
+    return info.originNode;
+  };
+
+
+  return (
+      <Modal show={isOpen} onHide={onClose} size={"xl"}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Dữ liệu checkin của địa điểm</Modal.Title>
+        </Modal.Header>
+        <Form >
+          <Modal.Body>
+            <Calendar cellRender={cellRender} mode={"month"}/>
+
+          </Modal.Body>
+        </Form>
+      </Modal>
+  )
+}
 
 function Location() {
   const [location, setLocation] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [dataEdit, setDataEdit] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState("")
   const [refetch, setRefetch] = useState(0);
 
   useEffect(() => {
@@ -227,7 +271,7 @@ function Location() {
 
   return (
     <>
-      <Row>
+      <Row >
         <Col md="12">
           <Card className="strpied-tabled-with-hover">
             <Card.Header style={{
@@ -261,7 +305,12 @@ function Location() {
                 </thead>
                 <tbody>
                   {location.map((item, index) => (
-                    <tr key={index}>
+                    <tr key={index}
+                        onClick={() => {
+                          setCurrentLocation(item.id);
+                          setShowCalendar(true);
+                        }}
+                    >
                       <td>{index + 1}</td>
                       <td style={{ cursor: 'pointer', color: '#2686ed' }}>{item.name}</td>
                       <td>{item.latitude}</td>
@@ -320,6 +369,14 @@ function Location() {
         }}
         onSubmit={handleUpdate}
         data={dataEdit}
+      />
+      <CalendarModal
+          isOpen={showCalendar}
+          onClose={() => {
+            setShowCalendar(false);
+            setCurrentLocation("")
+          }}
+          id={currentLocation}
       />
     </>
   );
