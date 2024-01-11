@@ -8,7 +8,21 @@ export class CheckinService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async findOne(id: number) {
-    return await this.prismaService.checkin.findFirst({ where: { id } });
+    return await this.prismaService.checkin.findFirst({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            userName: true
+          }
+        },
+        location: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
   }
 
   async findAll() {
@@ -35,6 +49,18 @@ export class CheckinService {
           locationId: locationId,
           createBy: createBy,
           status: status
+        },
+        include: {
+          user: {
+            select: {
+              userName: true
+            }
+          },
+          location: {
+            select: {
+              name: true
+            }
+          }
         }
       }
     );
