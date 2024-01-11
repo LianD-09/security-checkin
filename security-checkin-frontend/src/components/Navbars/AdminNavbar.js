@@ -66,7 +66,10 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  localStorage.removeItem('userData');
+                }}
               >
                 <Link to="/login" className="no-icon">Log out</Link>
               </Nav.Link>

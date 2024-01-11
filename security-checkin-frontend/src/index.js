@@ -20,6 +20,7 @@ import {Provider} from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
+<<<<<<< HEAD
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
@@ -29,4 +30,13 @@ root.render(
       </Switch>
     </BrowserRouter>
   </Provider>
+=======
+  <BrowserRouter>
+    <Switch>
+      <Route path="/login" component={Login} />
+      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+      <Redirect from="/" to="/admin/dashboard" />
+    </Switch>
+  </BrowserRouter>
+>>>>>>> 66c4207402193d71a09217ec476eb3f495b9fb03
 );

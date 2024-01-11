@@ -8,16 +8,28 @@ import Sidebar from "components/Sidebar/Sidebar";
 
 import routes from "routes.js";
 import sidebarImage from "assets/img/sidebar-3.jpg";
+<<<<<<< HEAD
 import { getAllLocation } from "services/locationServices";
 import { requestAllLocation } from "store/location/function";
 import { store } from "store";
+=======
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+>>>>>>> 66c4207402193d71a09217ec476eb3f495b9fb03
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
+  const history = useHistory();
   const mainPanel = React.useRef(null);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+
+  if (!userData) {
+    history.push('/login');
+    return;
+  }
+
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -46,10 +58,13 @@ function Admin() {
       element.parentNode.removeChild(element);
     }
   }, [location]);
+<<<<<<< HEAD
   useEffect(() => {
     requestAllLocation().then()
     console.log("store",store.getState())
   }, [])
+=======
+>>>>>>> 66c4207402193d71a09217ec476eb3f495b9fb03
 
   return (
     <>
