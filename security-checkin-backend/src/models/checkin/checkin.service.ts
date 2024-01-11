@@ -12,7 +12,20 @@ export class CheckinService {
   }
 
   async findAll() {
-    return await this.prismaService.checkin.findMany();
+    return await this.prismaService.checkin.findMany({
+      include: {
+        user: {
+          select: {
+            userName: true
+          }
+        },
+        location: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
   }
 
   async findBy(locationId?: number, createBy?: number, status?: Status) {
