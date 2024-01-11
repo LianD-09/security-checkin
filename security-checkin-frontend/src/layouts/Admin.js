@@ -9,13 +9,22 @@ import Sidebar from "components/Sidebar/Sidebar";
 import routes from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
+  const history = useHistory();
   const mainPanel = React.useRef(null);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+
+  if (!userData) {
+    history.push('/login');
+    return;
+  }
+
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -44,6 +53,7 @@ function Admin() {
       element.parentNode.removeChild(element);
     }
   }, [location]);
+
   return (
     <>
       <div className="wrapper">

@@ -9,22 +9,25 @@ import { useHistory } from 'react-router-dom';
 
 // react-bootstrap components
 import {
-    Badge,
     Button,
-    Card,
     Form,
-    Navbar,
-    Nav,
     Container,
     Row,
-    Col
+    Col,
+    Card,
+    Image
 } from "react-bootstrap";
-import { data } from "jquery";
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory();
+    const userData = localStorage.getItem('userData');
+
+    if (userData) {
+        history.push('/admin');
+        return;
+    }
 
     const handleLogin = () => {
         const userCredentials = {
@@ -32,26 +35,44 @@ const Login = () => {
             password: password,
         };
         // Gọi API với Axios
-        axios.post('REACT_APP_API_URL/auth', userCredentials)
+        axios.post(process.env.REACT_APP_API_URL + '/auth', userCredentials)
             .then(response => {
-                // Xử lý dữ liệu từ backend
-                console.log('Response from server:', response.data);
-                // Thực hiện các bước xác thực người dùng thành công
-                history.push('/admin');
-                console.log('mk đúng');
+                if (response.data?.data) {
+                    if (response.data?.data?.role === 'ADMIN') {
+                        localStorage.setItem('userData', JSON.stringify(response.data?.data));
+                        alert('Login successfully!');
+                        history.push('/admin');
+                    }
+                    else {
+                        alert('You are not Admin!');
+                    }
+                }
+                else {
+                    alert(response?.data?.error);
+                }
             })
-            .catch(error => {
-                console.error('Error during API call:', error);
-                // Xử lý lỗi nếu có
-                console.log('mk sai');
-
+            .catch(e => {
+                alert('Something was wrong!')
             });
     };
     return (
-        <>
-            <Container >
-                <Row>
-                    <Col md="12" style={{ display: "flex", alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/sigin-bg.jpeg)`,
+            backgroundSize: 'cover'
+        }}>
+            <Container style={{
+                display: "flex",
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+            }}
+            >
+                <Card style={{ width: 500, paddingLeft: 30, paddingRight: 30, paddingTop: 10 }}>
+                    <Card.Header style={{ display: "flex", alignItems: "center", justifyContent: 'center', flexDirection: 'column', gap: 20 }}>
+                        <Image src={process.env.PUBLIC_URL + '/logo.png'} width={100} />
+                        <p style={{ fontFamily: "sans-serif", fontSize: 27, fontWeight: 900, color: '#585858' }} > SECURITY ADMIN</p>
+                    </Card.Header>
+                    <Card.Body>
                         <Form>
                             <Row >
                                 <Col className="px-1" md="12">
@@ -95,10 +116,10 @@ const Login = () => {
                                 </Col>
                             </Row>
                         </Form>
-                    </Col>
-                </Row>
+                    </Card.Body>
+                </Card>
             </Container>
-        </>
+        </div>
     );
 };
 export default Login;
