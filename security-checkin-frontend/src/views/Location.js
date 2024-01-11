@@ -214,12 +214,12 @@ function Location() {
       })
   }
 
-  const downloadQR = () => {
+  const downloadQR = (name) => {
     const canvas = document.getElementById('qrcode');
     const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
     let downloadLink = document.createElement('a');
     downloadLink.href = pngUrl;
-    downloadLink.download = 'viblo-tranchien.png';
+    downloadLink.download = name + '.png';
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -273,7 +273,7 @@ function Location() {
                           size={150}
                           level={'H'}
                           includeMargin={true}
-                          onClick={downloadQR}
+                          onClick={() => downloadQR(Date.now())}
                           style={{ cursor: "pointer" }}
                         />
                       </td>

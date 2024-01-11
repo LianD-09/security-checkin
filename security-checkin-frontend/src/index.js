@@ -23,10 +23,11 @@ root.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" component={Login} /> */}
+        <Route path="/login" component={Login} />
         <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
         <Redirect from="/" to="/admin/dashboard" />
       </Switch>
     </BrowserRouter>
   </Provider>
+
 );
