@@ -11,6 +11,8 @@ import sidebarImage from "assets/img/sidebar-3.jpg";
 import { getAllLocation } from "services/locationServices";
 import { requestAllLocation } from "store/location/function";
 import { store } from "store";
+import {requestAllCheckins} from "../store/checkinLogs/function";
+
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
@@ -56,7 +58,7 @@ function Admin() {
   }, [location]);
   useEffect(() => {
     requestAllLocation().then()
-    console.log("store",store.getState())
+    requestAllCheckins().then()
   }, [])
 
   return (

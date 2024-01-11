@@ -7,7 +7,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {constantReducer, constantSetStore} from "./constant";
 import {setUserStore, userReducer} from "./user";
 import { locationsReducer, setLocationsStore } from './location';
-import { checkinReducer, setCheckinStore } from './checkinLogs';
+import {checkinsReducer, setCheckinsStore} from "./checkinLogs";
 // const middlewares: any[] = [];
 
 
@@ -24,10 +24,10 @@ const persistConfig = {
 export const store = configureStore({
   reducer: {
       location:locationsReducer,
-      checkin: checkinReducer,
+      checkin: checkinsReducer,
   }
 });
 // export type RootState = ReturnType<typeof store.getState>;
-setCheckinStore(store)
+setCheckinsStore(store)
 setLocationsStore(store)
 

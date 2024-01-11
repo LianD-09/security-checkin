@@ -1,22 +1,21 @@
 import { createSlice, PayloadAction, Store } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import { createDynamicReducer} from "../../utils/createDynamicReducers";
 import { batch } from "react-redux";
+import moment from "moment";
+import {createDynamicReducer} from "../../utils/createDynamicReducers";
+import getStore from "../getStore";
 
 
 
 
 
-const { setStore, reducer, sync, useByKey, setQueries, removeByKey, useKeysByQuery } =
-createDynamicReducer("checkin", "_id");
-
-export const setCheckinStore = setStore;
-export const checkinReducer = reducer;
-export const useCheckin = useByKey;
-export const syncCheckin = sync;
-export const setCheckinQueries = setQueries;
-export const removeCheckinByKey = removeByKey;
-export const useCheckinsByQuery = useKeysByQuery;
+export const {
+    reducer: checkinsReducer,
+    setStore: setCheckinsStore,
+    useByKey: useCheckin,
+    sync: syncCheckins,
+    setQueries: setCheckinsQueries,
+    useKeysByQuery: useCheckinsIdsByQuery
+} = createDynamicReducer('checkin', 'id');
 
 
 export const syncAllCheckins = (accessories) => {
@@ -24,11 +23,19 @@ export const syncAllCheckins = (accessories) => {
     let ids = [];
 
     for (let access of accessories) {
-         ids.push(access._id.toString());
+        const date = moment(access.createAt).format('DD-MM-YYYY');
+        let tmpDate = query[date] || []
+        ids.push(access.id.toString());
+
+
+        query = {
+            ...query,
+            [date] :[...new Set([...tmpDate,access.id.toString()])]
+        }
     }
     batch(() => {
-        syncCheckin(accessories);
-        setCheckinQueries({
+        syncCheckins(accessories);
+        setCheckinsQueries({
             all: ids,
             ...query
         });
@@ -36,6 +43,8 @@ export const syncAllCheckins = (accessories) => {
 };
 
 
-export const useCheckinIds = () => {
-    return useCheckinsByQuery("all") || [];
-};
+// export const useCheckinIds = () => {
+//     return useCheckinsByQuery("all") || [];
+// };
+
+
