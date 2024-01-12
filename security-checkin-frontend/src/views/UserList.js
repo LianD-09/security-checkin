@@ -18,7 +18,7 @@ import {
 import moment from "moment";
 import { getAllUser, deleteUserById, updateUserById } from "services/userServices";
 import { createUser } from "services/userServices";
-import PropTypes from 'prop-types';
+import { MenuItem, Select } from "@mui/material";
 
 const AddModal = ({ isOpen, onSubmit, onClose }) => {
   const [userName, setUserName] = useState('');
@@ -68,51 +68,51 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
-          <Row>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Lotte Center"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ flex: 1 }}>
-              <Form.Label>Role</Form.Label>
-              <Form.Select
-                placeholder="ADMIN"
-                required
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value='ADMIN'>ADMIN</option>
-                <option value='SECURITY'>SECURITY</option>
-              </Form.Select>
-            </Form.Group>
-          </Row>
-          <Row>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
-              <Form.Label>DoB</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="01/01/2001"
-                required
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ flex: 1 }}>
-              <Form.Label>Phone</Form.Label>
-              <Form.Control
-                placeholder="0123345679"
-                required
-                inputMode="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Form.Group>
-          </Row>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Lotte Center"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>DoB</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="01/01/2001"
+              required
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+            <Form.Label>Phone</Form.Label>
+            <Form.Control
+              placeholder="0123345679"
+              required
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+            <Form.Label>Role</Form.Label>
+            <Select
+              value={role}
+              label="Selection Option"
+              required
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="ADMIN">ADMIN</MenuItem>
+              <MenuItem value="SECURITY">SECURITY</MenuItem>
+            </Select>
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose}>
@@ -331,7 +331,7 @@ function UserList() {
                       <td>{index + 1}</td>
                       <td>{item.userName}</td>
                       <td>{item.name}</td>
-                      <td>{moment(item.createAt).format("DD/MM/YYYY")}</td>
+                      <td>{moment(item.dob).format("DD/MM/YYYY")}</td>
                       <td>{item.phone}</td>
                       <td>{item.role}</td>
                       <td>
