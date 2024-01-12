@@ -332,7 +332,7 @@ function UserList() {
                       <td>{index + 1}</td>
                       <td>{item.userName}</td>
                       <td>{item.name}</td>
-                      <td>{moment(item.dob).format("DD/MM/YYYY")}</td>
+                      <td>{item.dob}</td>
                       <td>{item.phone}</td>
                       <td>{item.role}</td>
                       <td>
