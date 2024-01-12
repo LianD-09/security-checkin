@@ -18,7 +18,7 @@ import {
 import moment from "moment";
 import { getAllUser, deleteUserById, updateUserById } from "services/userServices";
 import { createUser } from "services/userServices";
-import PropTypes from 'prop-types';
+import { MenuItem, Select } from "@mui/material";
 
 const AddModal = ({ isOpen, onSubmit, onClose }) => {
   const [userName, setUserName] = useState('');
@@ -104,14 +104,19 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
             <Form.Label>Role</Form.Label>
-            <Form.Control
-              placeholder="ADMIN"
+            <Select
+              value={role}
+              label="Selection Option"
               autoFocus
               required
-              inputMode="numeric"
-              value={role}
               onChange={(e) => setRole(e.target.value)}
-            />
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="ADMIN">ADMIN</MenuItem>
+              <MenuItem value="SECURITY">SECURITY</MenuItem>
+            </Select>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
@@ -345,7 +350,7 @@ function UserList() {
                       <td>{index + 1}</td>
                       <td>{item.userName}</td>
                       <td>{item.name}</td>
-                      <td>{moment(item.createAt).format("DD/MM/YYYY")}</td>
+                      <td>{moment(item.dob).format("DD/MM/YYYY")}</td>
                       <td>{item.phone}</td>
                       <td>{item.role}</td>
                       <td>
