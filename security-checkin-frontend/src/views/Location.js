@@ -15,8 +15,8 @@ import { deleteLocationById, getAllLocation, updateLocationById } from "../servi
 import { createLocation } from "../services/locationServices";
 import QRCode from "qrcode.react";
 import moment from "moment";
-import {Calendar} from "antd";
-import {useCheckinByDateAndLocation} from "../store/checkinLogs/function";
+import { Calendar } from "antd";
+import { useCheckinByDateAndLocation } from "../store/checkinLogs/function";
 
 const AddModal = ({ isOpen, onSubmit, onClose }) => {
   const [name, setName] = useState('');
@@ -175,34 +175,34 @@ const CalendarModal = ({ isOpen, onClose, id }) => {
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
-        <div className="events">
-          {listData.map((item) => (
-              <p key={item.id}>
-                {moment(item?.createAt).format("HH:mm")}
-              </p>
-          ))}
-        </div>
+      <div className="events">
+        {listData.map((item) => (
+          <p key={item.id}>
+            {moment(item?.createAt).format("HH:mm")}
+          </p>
+        ))}
+      </div>
     );
   };
-  const cellRender= (current, info) => {
+  const cellRender = (current, info) => {
     if (info.type === 'date') return dateCellRender(current);
     return info.originNode;
   };
 
 
   return (
-      <Modal show={isOpen} onHide={onClose} size={"xl"}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Dữ liệu checkin của địa điểm</Modal.Title>
-        </Modal.Header>
-        <Form >
-          <Modal.Body>
-            <Calendar cellRender={cellRender} mode={"month"}/>
+    <Modal show={isOpen} onHide={onClose} size={"xl"}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Dữ liệu checkin của địa điểm</Modal.Title>
+      </Modal.Header>
+      <Form >
+        <Modal.Body>
+          <Calendar cellRender={cellRender} mode={"month"} />
 
-          </Modal.Body>
-        </Form>
-      </Modal>
+        </Modal.Body>
+      </Form>
+    </Modal>
   )
 }
 
@@ -306,10 +306,10 @@ function Location() {
                 <tbody>
                   {location.map((item, index) => (
                     <tr key={index}
-                        onClick={() => {
-                          setCurrentLocation(item.id);
-                          setShowCalendar(true);
-                        }}
+                      onClick={() => {
+                        setCurrentLocation(item.id);
+                        setShowCalendar(true);
+                      }}
                     >
                       <td>{index + 1}</td>
                       <td style={{ cursor: 'pointer', color: '#2686ed' }}>{item.name}</td>
@@ -336,7 +336,8 @@ function Location() {
                             marginRight: '10px',
                             cursor: 'pointer'
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setDataEdit(item);
                             setShowEdit(true);
                           }}
@@ -349,7 +350,10 @@ function Location() {
                             borderRadius: '4px',
                             cursor: 'pointer'
                           }}
-                          onClick={() => handleDelete(item.id)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(item.id)
+                          }}
                         />
                       </td>
                     </tr>
@@ -371,12 +375,12 @@ function Location() {
         data={dataEdit}
       />
       <CalendarModal
-          isOpen={showCalendar}
-          onClose={() => {
-            setShowCalendar(false);
-            setCurrentLocation("")
-          }}
-          id={currentLocation}
+        isOpen={showCalendar}
+        onClose={() => {
+          setShowCalendar(false);
+          setCurrentLocation("")
+        }}
+        id={currentLocation}
       />
     </>
   );

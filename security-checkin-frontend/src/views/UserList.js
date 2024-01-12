@@ -24,7 +24,7 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('ADMIN');
   const [phone, setPhone] = useState('');
   const [dob, setDob] = useState('');
 
@@ -41,7 +41,7 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
   };
 
   return (
-    <Modal show={isOpen} onHide={onClose}>
+    <Modal show={isOpen} onHide={onClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Add user</Modal.Title>
       </Modal.Header>
@@ -61,58 +61,58 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="text"
+              type="password"
               placeholder="string"
-              autoFocus
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Lotte Center"
-              autoFocus
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>DoB</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="01/01/2001"
-              autoFocus
-              required
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              placeholder="0123345679"
-              autoFocus
-              required
-              inputMode="numeric"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              placeholder="ADMIN"
-              autoFocus
-              required
-              inputMode="numeric"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            />
-          </Form.Group>
+          <Row>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Lotte Center"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ flex: 1 }}>
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                placeholder="ADMIN"
+                required
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value='ADMIN'>ADMIN</option>
+                <option value='SECURITY'>SECURITY</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
+              <Form.Label>DoB</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="01/01/2001"
+                required
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ flex: 1 }}>
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                placeholder="0123345679"
+                required
+                inputMode="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </Form.Group>
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose}>
@@ -129,7 +129,6 @@ const AddModal = ({ isOpen, onSubmit, onClose }) => {
 
 const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
   const [userName, setUserName] = useState(data?.userName ?? '');
-  const [password, setPassword] = useState(data?.password ?? '');
   const [name, setName] = useState(data?.name ?? '');
   const [role, setRole] = useState(data?.role ?? '');
   const [phone, setPhone] = useState(data?.phone ?? '');
@@ -137,7 +136,6 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
 
   useEffect(() => {
     setUserName(data?.userName);
-    setPassword(data?.password);
     setName(data?.name);
     setRole(data?.role);
     setPhone(data?.phone);
@@ -148,7 +146,6 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
   const handleSubmit = () => {
     console.log(data?.id, {
       userName,
-      password,
       name,
       role,
       phone,
@@ -156,7 +153,6 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
     });
     onSubmit(data?.id, {
       userName,
-      password,
       name,
       role,
       phone,
@@ -166,7 +162,7 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
   }
 
   return (
-    <Modal show={isOpen} onHide={onClose}>
+    <Modal show={isOpen} onHide={onClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Add user</Modal.Title>
       </Modal.Header>
@@ -183,61 +179,51 @@ const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
               onChange={(e) => setUserName(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="string"
-              autoFocus
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Lotte Center"
-              autoFocus
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>DoB</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="01/01/2001"
-              autoFocus
-              required
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              placeholder="0123345679"
-              autoFocus
-              required
-              inputMode="numeric"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              placeholder="ADMIN"
-              autoFocus
-              required
-              inputMode="numeric"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            />
-          </Form.Group>
+          <Row>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Lotte Center"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput3" style={{ flex: 1 }}>
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                placeholder="ADMIN"
+                required
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value='ADMIN'>ADMIN</option>
+                <option value='SECURITY'>SECURITY</option>
+              </Form.Select>
+            </Form.Group>
+          </Row>
+          <Row>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={{ flex: 1 }}>
+              <Form.Label>DoB</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="01/01/2001"
+                required
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput2" style={{ flex: 1 }}>
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                placeholder="0123345679"
+                required
+                inputMode="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </Form.Group>
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose}>
