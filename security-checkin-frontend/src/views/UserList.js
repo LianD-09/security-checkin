@@ -12,13 +12,252 @@ import {
   Container,
   Row,
   Col,
+  Form,
+  Modal
 } from "react-bootstrap";
-import { getAllUser } from "services/userServices";
 import moment from "moment";
+import { getAllUser, deleteUserById, updateUserById } from "services/userServices";
 import { createUser } from "services/userServices";
+import PropTypes from 'prop-types';
+
+const AddModal = ({ isOpen, onSubmit, onClose }) => {
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
+  const [phone, setPhone] = useState('');
+  const [dob, setDob] = useState('');
+
+  const handleSubmit = () => {
+    onSubmit({
+      userName,
+      password,
+      name,
+      role,
+      phone,
+      dob
+    });
+    onClose();
+  };
+
+  return (
+    <Modal show={isOpen} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add user</Modal.Title>
+      </Modal.Header>
+      <Form>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>UserName</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="duong123"
+              autoFocus
+              required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="string"
+              autoFocus
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Lotte Center"
+              autoFocus
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>DoB</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="01/01/2001"
+              autoFocus
+              required
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+            <Form.Label>Phone</Form.Label>
+            <Form.Control
+              placeholder="0123345679"
+              autoFocus
+              required
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+            <Form.Label>Role</Form.Label>
+            <Form.Control
+              placeholder="ADMIN"
+              autoFocus
+              required
+              inputMode="numeric"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
+  )
+}
+
+const EditModal = ({ isOpen, onSubmit, onClose, data }) => {
+  const [userName, setUserName] = useState(data?.userName ?? '');
+  const [password, setPassword] = useState(data?.password ?? '');
+  const [name, setName] = useState(data?.name ?? '');
+  const [role, setRole] = useState(data?.role ?? '');
+  const [phone, setPhone] = useState(data?.phone ?? '');
+  const [dob, setDob] = useState(data?.dob ?? '');
+
+  useEffect(() => {
+    setUserName(data?.userName);
+    setPassword(data?.password);
+    setName(data?.name);
+    setRole(data?.role);
+    setPhone(data?.phone);
+    setDob(data?.dob);
+
+  }, [data]);
+
+  const handleSubmit = () => {
+    console.log(data?.id, {
+      userName,
+      password,
+      name,
+      role,
+      phone,
+      dob
+    });
+    onSubmit(data?.id, {
+      userName,
+      password,
+      name,
+      role,
+      phone,
+      dob
+    });
+    onClose();
+  }
+
+  return (
+    <Modal show={isOpen} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add user</Modal.Title>
+      </Modal.Header>
+      <Form>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>UserName</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="duong123"
+              autoFocus
+              required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="string"
+              autoFocus
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Lotte Center"
+              autoFocus
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>DoB</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="01/01/2001"
+              autoFocus
+              required
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+            <Form.Label>Phone</Form.Label>
+            <Form.Control
+              placeholder="0123345679"
+              autoFocus
+              required
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+            <Form.Label>Role</Form.Label>
+            <Form.Control
+              placeholder="ADMIN"
+              autoFocus
+              required
+              inputMode="numeric"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
+  )
+}
 
 function UserList() {
   const [userList, setUserList] = useState([]);
+  const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [dataEdit, setDataEdit] = useState(null);
+  const [refetch, setRefetch] = useState(0);
 
   useEffect(() => {
     getAllUser()
@@ -28,15 +267,38 @@ function UserList() {
       .catch(e => {
         console.log(e);
       })
-  }, [])
+  }, [refetch])
 
   const handleAddUser = (data) => {
     createUser(data)
       .then(res => {
         alert('Create user succesfully!')
+        setRefetch(refetch + 1);
       })
       .catch(e => {
         console.log(e);
+        alert('Something when wrong!')
+      })
+  }
+
+  const handleUpdate = (id, data) => {
+    updateUserById(id, data)
+      .then(res => {
+        alert('Update User successfully!');
+        setRefetch(refetch + 1);
+      })
+      .catch(e => {
+        alert('Something when wrong!')
+      })
+  }
+
+  const handleDelete = (id) => {
+    deleteUserById(id)
+      .then(res => {
+        alert('Delete User successfully!')
+        setRefetch(refetch + 1);
+      })
+      .catch(e => {
         alert('Something when wrong!')
       })
   }
@@ -58,31 +320,10 @@ function UserList() {
                   borderRadius: '4px',
                   padding: '4px 8px'
                 }}
-                onClick={() => handleAddUser({
-                  userName: "linhda123",
-                  password: "0123456789",
-                  role: 'ADMIN',
-                  name: 'Linh Do',
-                  phone: '0363771010',
-                  dob: '15-09-2001'
-                })}
+                onClick={() => setShowAdd(true)}
               >
                 Add user
               </button>
-              {/* <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
-              >
-                <Box sx={{ ...style, width: 400 }}>
-                  <h2 id="parent-modal-title">Text in a modal</h2>
-                  <p id="parent-modal-description">
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                  </p>
-                  <ChildModal />
-                </Box>
-              </Modal> */}
             </Card.Header>
             <Card.Body className="table-full-width table-responsive px-0">
               <Table className="table-hover table-striped">
@@ -101,10 +342,10 @@ function UserList() {
                 <tbody>
                   {userList.map((item, index) => (
                     <tr key={index}>
-                      <td>{index}</td>
+                      <td>{index + 1}</td>
                       <td>{item.userName}</td>
                       <td>{item.name}</td>
-                      <td>{moment(item.dob).format("DD-MM-YYYY")}</td>
+                      <td>{moment(item.createAt).format("DD/MM/YYYY")}</td>
                       <td>{item.phone}</td>
                       <td>{item.role}</td>
                       <td>
@@ -116,7 +357,12 @@ function UserList() {
                             borderRadius: '4px',
                             marginRight: '10px',
                             cursor: 'pointer'
-                          }} />
+                          }}
+                          onClick={() => {
+                            setDataEdit(item);
+                            setShowEdit(true);
+                          }}
+                        />
                         <DeleteForeverIcon
                           style={{
                             backgroundColor: '#e53e3e',
@@ -124,17 +370,28 @@ function UserList() {
                             padding: '3px',
                             borderRadius: '4px',
                             cursor: 'pointer'
-                          }} />
+                          }}
+                          onClick={() => handleDelete(item.id)}
+                        />
                       </td>
                     </tr>
                   ))}
-
                 </tbody>
               </Table>
             </Card.Body>
           </Card>
         </Col>
       </Row>
+      <AddModal isOpen={showAdd} onClose={() => setShowAdd(false)} onSubmit={handleAddUser} />
+      <EditModal
+        isOpen={showEdit}
+        onClose={() => {
+          setShowEdit(false);
+          setDataEdit(null);
+        }}
+        onSubmit={handleUpdate}
+        data={dataEdit}
+      />
     </>
   );
 }

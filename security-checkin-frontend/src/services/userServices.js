@@ -20,3 +20,16 @@ export const createUser = async (body) => {
         dob: body.dob
     });
 }
+export const updateUserById = async (id, body) => {
+    return await axios.post(`${apiEndpoint}/${id}`, {
+        userName: body.userName,
+        password: body.password,
+        role: body.role,
+        name: body.name,
+        phone: body.phone,
+        dob: body.dob
+    });
+}
+export const deleteUserById = async (id) => {
+    return await axios.delete(`${apiEndpoint}/${id}`);
+}
