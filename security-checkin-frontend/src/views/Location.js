@@ -258,8 +258,8 @@ function Location() {
       })
   }
 
-  const downloadQR = (name) => {
-    const canvas = document.getElementById('qrcode');
+  const downloadQR = (name, index) => {
+    const canvas = document.getElementById('qrcode' + index);
     const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
     let downloadLink = document.createElement('a');
     downloadLink.href = pngUrl;
@@ -317,12 +317,15 @@ function Location() {
                       <td>{item.longtitude}</td>
                       <td>
                         <QRCode
-                          id='qrcode'
+                          id={'qrcode' + index}
                           value={JSON.stringify(item)}
                           size={150}
                           level={'H'}
                           includeMargin={true}
-                          onClick={() => downloadQR(Date.now())}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            downloadQR(Date.now(), index)
+                          }}
                           style={{ cursor: "pointer" }}
                         />
                       </td>
